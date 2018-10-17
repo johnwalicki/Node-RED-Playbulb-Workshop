@@ -1,0 +1,534 @@
+[
+    {
+        "id": "eb70fc5a.9a8ca",
+        "type": "tab",
+        "label": "Extract Color from a Pix"
+    },
+    {
+        "id": "4eb37734.1d269",
+        "type": "ibmiot in",
+        "z": "eb70fc5a.9a8ca",
+        "authentication": "boundService",
+        "apiKey": "",
+        "inputType": "evt",
+        "logicalInterface": "",
+        "ruleId": "",
+        "deviceId": "PiController",
+        "applicationId": "",
+        "deviceType": "raspi",
+        "eventType": "picData",
+        "commandType": "",
+        "format": "data",
+        "name": "IBM IoT",
+        "service": "registered",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": "",
+        "allLogicalInterfaces": false,
+        "allEvents": false,
+        "allCommands": "",
+        "allFormats": false,
+        "qos": 0,
+        "x": 150,
+        "y": 260,
+        "wires": [
+            [
+                "ae3c4f1a.5af848",
+                "5b7ffeea.cb7eb",
+                "6a055037.1a7a7"
+            ]
+        ]
+    },
+    {
+        "id": "6ae728b6.37716",
+        "type": "ibmiot out",
+        "z": "eb70fc5a.9a8ca",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "PiController",
+        "deviceType": "raspi",
+        "eventCommandType": "takePic",
+        "format": "json",
+        "data": "takePic",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 360,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "85b07b60.a84a9",
+        "type": "ui_button",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "group": "25dd8a98.1dae7e",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "passthru": false,
+        "label": "Take Picture",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "6ae728b6.37716",
+                "3c1af350.c438ac"
+            ]
+        ]
+    },
+    {
+        "id": "ae3c4f1a.5af848",
+        "type": "debug",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 390,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "5afb7ade.8b5b64",
+        "type": "debug",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "result",
+        "x": 620,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5b7ffeea.cb7eb",
+        "type": "base64",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Encode",
+        "x": 380,
+        "y": 260,
+        "wires": [
+            [
+                "511df796.eed0d8"
+            ]
+        ]
+    },
+    {
+        "id": "511df796.eed0d8",
+        "type": "ui_template",
+        "z": "eb70fc5a.9a8ca",
+        "group": "25dd8a98.1dae7e",
+        "name": "Display Image",
+        "order": 2,
+        "width": "12",
+        "height": "10",
+        "format": "<h2>Teach Watson colors!</h2>\n<img width=\"320\" height=\"240\" alt=\"Watson Image\" src=\"data:image/jpg;base64,{{msg.payload}}\"/>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "x": 640,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60530dd2.b163e4",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Table Results",
+        "func": "var picInfo = msg.result.images[0].classifiers[0].classes;\nvar arrayLength = picInfo.length;\nmsg.template=\"<h2>Watson sees this</h2><table><tr><th>Class</th><th>Confidence</th></tr>\";\nfor (var i = 0; i < arrayLength; i++) {\n  msg.template = msg.template + \"<tr><td>\" + picInfo[i].class + \"</td><td>\" + picInfo[i].score + \"</td></tr>\";\n}\nmsg.template = msg.template + \"</table>\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 630,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c4aa3404.d8e02",
+        "type": "debug",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 850,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "6e2f35d7.faee3c",
+        "type": "ui_template",
+        "z": "eb70fc5a.9a8ca",
+        "group": "25dd8a98.1dae7e",
+        "name": "",
+        "order": 0,
+        "width": "12",
+        "height": "10",
+        "format": "<div ng-bind-html=\"msg.template\"></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "x": 840,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3c1af350.c438ac",
+        "type": "debug",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 370,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "e43e7604.1f21e8",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Sentence",
+        "func": "if (typeof msg.result == 'undefined') {\n    return null;\n}\n\nvar bestcolor = -1;\nvar colorscore = 0;\nvar c_id = 0;\nvar say = \"\";\nvar item;\n\nfor ( c_id=0; c_id < (msg.result.images[0].classifiers.length); c_id++ ){\n    // find the best color, if any\n    for( i =0; i<(msg.result.images[0].classifiers[c_id].classes.length); i++ ){\n      var object = msg.result.images[0].classifiers[c_id].classes[i].class;\n      if ( object.includes(\"color\") ) {\n        if( msg.result.images[0].classifiers[c_id].classes[i].score > colorscore){\n            bestcolor = i;\n            colorscore = msg.result.images[0].classifiers[c_id].classes[i].score;\n        }\n      }\n    }\n \n    var bestItem = 0;\n    var itemScore = 0;\n    for( i =0; i<(msg.result.images[0].classifiers[c_id].classes.length); i++ ){\n      var object = msg.result.images[0].classifiers[c_id].classes[i].class;\n      if ( !object.includes(\"color\") ) {\n        if( msg.result.images[0].classifiers[c_id].classes[i].score > itemScore){\n            bestItem = i;\n            itemScore =  msg.result.images[0].classifiers[c_id].classes[i].score;\n        }\n      }\n    }\n \n     if( bestcolor != \"-1\") {\n        // found a color\n        item = msg.result.images[0].classifiers[c_id].classes[bestcolor].class + \" \" + msg.result.images[0].classifiers[c_id].classes[bestItem].class;\n        bestcolor = -1;\n    } else {\n       item = msg.result.images[0].classifiers[c_id].classes[bestItem].class;\n    }\n    say = say + \" Watson's \" + msg.result.images[0].classifiers[c_id].name + \" classifier thinks this picture contains a \" + item +\".\";\n}\n\nmsg.payload =  say;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 620,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c68f3c7.1d2e8c",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorYellow-Joy",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 830,
+        "y": 600,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "9643923c.89f87",
+        "type": "switch",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SelectColor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "blue",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pink",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "party",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 7,
+        "x": 570,
+        "y": 700,
+        "wires": [
+            [
+                "2c68f3c7.1d2e8c"
+            ],
+            [
+                "471cc98a.0029"
+            ],
+            [
+                "e18a813e.c7a75"
+            ],
+            [
+                "117493c9.a565dc"
+            ],
+            [
+                "cedc6004.aedf"
+            ],
+            [
+                "b1cbf789.b0c9b"
+            ],
+            [
+                "a738dcc3.1a9ed"
+            ]
+        ]
+    },
+    {
+        "id": "471cc98a.0029",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorRed-Fear",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 830,
+        "y": 640,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "117493c9.a565dc",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorGreen-Anger",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 840,
+        "y": 720,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "e18a813e.c7a75",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorBlue-Sadness",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 840,
+        "y": 680,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "e9d99a65.04b18",
+        "type": "debug",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 570,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "a738dcc3.1a9ed",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorOtherOff",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":0,\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 830,
+        "y": 840,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "cedc6004.aedf",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "SetColorPink",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 105,\n\"bb\" : 180,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 810,
+        "y": 760,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "871c587f.43cca",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Extract color from message",
+        "func": "var color = \"\";\n//var image_text = msg.result.images[0].text;\n//msg.payload = image_text;\n\nif( msg.payload.includes(\"yellow\") ) {\n    color = \"yellow\";\n} else if ( msg.payload.includes(\"red\") ) { \n    color = \"red\";\n} else if ( msg.payload.includes(\"read\") ) {\n    color = \"red\";\n} else if (msg.payload.includes(\"blue\") ) {\n    color = \"blue\";\n} else if ( msg.payload.includes(\"green\") ) {\n    color = \"green\";\n} else if ( msg.payload.includes(\"pink\") ) {\n    color = \"pink\";\n} else if ( msg.payload.includes(\"party\") ) {\n    color = \"party\";\n}\nmsg.payload = color;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 300,
+        "y": 700,
+        "wires": [
+            [
+                "9643923c.89f87",
+                "e9d99a65.04b18"
+            ]
+        ]
+    },
+    {
+        "id": "b1cbf789.b0c9b",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Party!",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n}\nmsg = {};\n\n// now set the new msg object\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=playbulbmsg;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 800,
+        "wires": [
+            [
+                "6a5da711.865118"
+            ]
+        ]
+    },
+    {
+        "id": "6a5da711.865118",
+        "type": "ibmiot out",
+        "z": "eb70fc5a.9a8ca",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 1100,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "14c6a632.1e5e7a",
+        "type": "inject",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Test",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "6ae728b6.37716"
+            ]
+        ]
+    },
+    {
+        "id": "6a055037.1a7a7",
+        "type": "visual-recognition-v3",
+        "z": "eb70fc5a.9a8ca",
+        "name": "",
+        "image-feature": "classifyImage",
+        "lang": "en",
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "5afb7ade.8b5b64",
+                "e43e7604.1f21e8",
+                "60530dd2.b163e4",
+                "7234818b.a71618"
+            ]
+        ]
+    },
+    {
+        "id": "3479e780.f16ec",
+        "type": "comment",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Take Photo on Raspberry Pi",
+        "info": "",
+        "x": 150,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "cd5c6f9e.699ff8",
+        "type": "comment",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Receive Photo from Raspberry Pi",
+        "info": "",
+        "x": 170,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "7234818b.a71618",
+        "type": "function",
+        "z": "eb70fc5a.9a8ca",
+        "name": "Merge",
+        "func": "if (typeof msg.result == 'undefined') {\n    return null;\n}\n\n// Text Extraction\nif (typeof msg.result.images[0].text != 'undefined') {\n    var image_text = msg.result.images[0].text;\n    msg.payload = image_text;\n    msg.template = image_text;\n    if( image_text.length >0 ) {\n       msg.template= \"Watson found the words: \"+image_text;\n    }\n    return msg;\n}\n\nvar bestcolor = -1;\nvar colorscore = 0;\nvar c_id = 0;\nvar say = \"\";\nvar item;\n\nfor ( c_id=0; c_id < (msg.result.images[0].classifiers.length); c_id++ ){\n    // find the best color, if any\n    for( i =0; i<(msg.result.images[0].classifiers[c_id].classes.length); i++ ){\n      var object = msg.result.images[0].classifiers[c_id].classes[i].class;\n      if ( object.includes(\"color\") ) {\n        if( msg.result.images[0].classifiers[c_id].classes[i].score > colorscore){\n            bestcolor = i;\n            colorscore = msg.result.images[0].classifiers[c_id].classes[i].score;\n        }\n      }\n    }\n \n    var bestItem = 0;\n    var itemScore = 0;\n    for( i =0; i<(msg.result.images[0].classifiers[c_id].classes.length); i++ ){\n      var object = msg.result.images[0].classifiers[c_id].classes[i].class;\n      if ( !object.includes(\"color\") ) {\n        if( msg.result.images[0].classifiers[c_id].classes[i].score > itemScore){\n            bestItem = i;\n            itemScore =  msg.result.images[0].classifiers[c_id].classes[i].score;\n        }\n      }\n    }\n \n     if( bestcolor != \"-1\") {\n        // found a color\n        item = msg.result.images[0].classifiers[c_id].classes[bestcolor].class + \" \" + msg.result.images[0].classifiers[c_id].classes[bestItem].class;\n        bestcolor = -1;\n    } else {\n       item = msg.result.images[0].classifiers[c_id].classes[bestItem].class;\n    }\n//    say = say + \" Watson's \" + msg.result.images[0].classifiers[c_id].name + \" classifier thinks this picture contains a \" + item +\".\";\n    say = say + \" Watson thinks this picture contains a \" + item +\".\";\n}\nmsg.payload =  say;\n\nvar picInfo = msg.result.images[0].classifiers[0].classes;\nvar arrayLength = picInfo.length;\n\nmsg.template=\"<style>h4 { text-align: center; margin: 10px; }\";\nmsg.template=msg.template+\"table {    width: 440px;    margin-top: 10px; }\";\nmsg.template=msg.template+\"th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; background-color: #FFFFFF; width: 50%;}\";\nmsg.template=msg.template+\".classifier {background-color: rgb(85,150,230);text-align: center;}\";\nmsg.template=msg.template+\".title { background-color:LightGrey;}</style>\";\n\nmsg.template=msg.template+\"<h2>\"+say+\"</h2><table span=100%><tr><th>Class</th><th>Confidence</th></tr>\";\nfor (var i = 0; i < arrayLength; i++) {\n  msg.template = msg.template + \"<tr><td>\" + picInfo[i].class + \"</td><td>\" + picInfo[i].score + \"</td></tr>\";\n}\nmsg.template = msg.template + \"</table>\";\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "6e2f35d7.faee3c",
+                "c4aa3404.d8e02",
+                "871c587f.43cca"
+            ]
+        ]
+    },
+    {
+        "id": "25dd8a98.1dae7e",
+        "type": "ui_group",
+        "z": "",
+        "name": "Color photos",
+        "tab": "d3964813.f4856",
+        "order": 6,
+        "disp": false,
+        "width": "12"
+    },
+    {
+        "id": "d3964813.f4856",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Pictures",
+        "icon": "dashboard"
+    }
+]

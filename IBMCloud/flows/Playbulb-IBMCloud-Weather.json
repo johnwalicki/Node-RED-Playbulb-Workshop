@@ -1,0 +1,546 @@
+[
+    {
+        "id": "4cb0b021.92731",
+        "type": "tab",
+        "label": "Weather Mood",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "90d1bfd7.ec1f2",
+        "type": "inject",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 520,
+        "wires": [
+            [
+                "ba51bfeb.59fa4"
+            ]
+        ]
+    },
+    {
+        "id": "ba51bfeb.59fa4",
+        "type": "weather_insights",
+        "z": "4cb0b021.92731",
+        "name": "GetWeatherRidgewood",
+        "service": "/observations.json",
+        "geocode": "40.9792645,-74.1165313",
+        "units": "m",
+        "language": "",
+        "x": 370,
+        "y": 520,
+        "wires": [
+            [
+                "3e45483f.af118"
+            ]
+        ]
+    },
+    {
+        "id": "9a80dd2c.8ebdd",
+        "type": "switch",
+        "z": "4cb0b021.92731",
+        "name": "TempCheck",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "12",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "12",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 330,
+        "y": 720,
+        "wires": [
+            [
+                "ba4ac47e.5f95"
+            ],
+            [
+                "e280018d.0da738"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d98823e9.962658",
+        "type": "debug",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 790,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "ba4ac47e.5f95",
+        "type": "function",
+        "z": "4cb0b021.92731",
+        "name": "SetCandleFlashingBlueCold",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n//00 7e ff 00 00 00 19 00\"\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":0,\n\"speed1\":0,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 580,
+        "y": 700,
+        "wires": [
+            [
+                "e22e91a1.212d68"
+            ]
+        ]
+    },
+    {
+        "id": "e22e91a1.212d68",
+        "type": "ibmiot out",
+        "z": "4cb0b021.92731",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 800,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "e280018d.0da738",
+        "type": "function",
+        "z": "4cb0b021.92731",
+        "name": "Set Color Red Hot",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0\n    \n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 740,
+        "wires": [
+            [
+                "e22e91a1.212d68"
+            ]
+        ]
+    },
+    {
+        "id": "f041a03a.fc7a38",
+        "type": "weather_insights",
+        "z": "4cb0b021.92731",
+        "name": "GetWeatherSydneyAus",
+        "service": "/observations.json",
+        "geocode": "-33.84829,150.9319631",
+        "units": "m",
+        "language": "",
+        "x": 370,
+        "y": 560,
+        "wires": [
+            [
+                "3e45483f.af118"
+            ]
+        ]
+    },
+    {
+        "id": "e39ae01a.7d8ab8",
+        "type": "inject",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 560,
+        "wires": [
+            [
+                "f041a03a.fc7a38"
+            ]
+        ]
+    },
+    {
+        "id": "90179921.0cedc8",
+        "type": "weather_insights",
+        "z": "4cb0b021.92731",
+        "name": "GetWeatherCalgary",
+        "service": "/observations.json",
+        "geocode": "51.0486,-114.0708",
+        "units": "m",
+        "language": "",
+        "x": 380,
+        "y": 600,
+        "wires": [
+            [
+                "3e45483f.af118"
+            ]
+        ]
+    },
+    {
+        "id": "bfa5e410.4dead8",
+        "type": "inject",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 600,
+        "wires": [
+            [
+                "90179921.0cedc8"
+            ]
+        ]
+    },
+    {
+        "id": "b07ec45c.5066a8",
+        "type": "debug",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "observation",
+        "x": 810,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "9c49b6c8.ac6298",
+        "type": "inject",
+        "z": "4cb0b021.92731",
+        "name": "What zipcode?",
+        "topic": "",
+        "payload": "07450",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "745b0f0d.8e0ad"
+            ]
+        ]
+    },
+    {
+        "id": "6285f8fa.f634",
+        "type": "function",
+        "z": "4cb0b021.92731",
+        "name": "Format Geocode",
+        "func": "// The latitude is in msg.payload.results[0].geometry.location.lat\n// The longitude is in msg.payload.results[0].geometry.location.lng\n\n// Pass the Weather Insights node a msg.payload = \"lat,lng\"\n\nvar geocode = msg.payload.results[0].geometry.location.lat+\",\"+msg.payload.results[0].geometry.location.lng;\nmsg.payload = geocode;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 150,
+        "y": 480,
+        "wires": [
+            [
+                "9787082c.d7409"
+            ]
+        ]
+    },
+    {
+        "id": "9787082c.d7409",
+        "type": "weather_insights",
+        "z": "4cb0b021.92731",
+        "name": "GetWeather for ZipCode",
+        "host": "",
+        "service": "/observations.json",
+        "geocode": "",
+        "units": "m",
+        "language": "",
+        "x": 370,
+        "y": 480,
+        "wires": [
+            [
+                "3e45483f.af118",
+                "b07ec45c.5066a8"
+            ]
+        ]
+    },
+    {
+        "id": "ae87bf71.77626",
+        "type": "debug",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "location",
+        "x": 1070,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3e45483f.af118",
+        "type": "change",
+        "z": "4cb0b021.92731",
+        "name": "Feels Like",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "observation.feels_like",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 540,
+        "wires": [
+            [
+                "d98823e9.962658",
+                "9a80dd2c.8ebdd"
+            ]
+        ]
+    },
+    {
+        "id": "75d7f7af.d43108",
+        "type": "debug",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 850,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "745b0f0d.8e0ad",
+        "type": "change",
+        "z": "4cb0b021.92731",
+        "name": "Google geolocation API key",
+        "rules": [
+            {
+                "t": "set",
+                "p": "key",
+                "pt": "msg",
+                "to": "Your Google API key here",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "zipcode",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 80,
+        "wires": [
+            [
+                "4e83d92f.556418"
+            ]
+        ]
+    },
+    {
+        "id": "4e83d92f.556418",
+        "type": "http request",
+        "z": "4cb0b021.92731",
+        "name": "Google Geocode Request",
+        "method": "GET",
+        "ret": "obj",
+        "url": "https://maps.googleapis.com/maps/api/geocode/json?address={{{zipcode}}}&key={{{key}}}&format=json",
+        "tls": "",
+        "x": 620,
+        "y": 80,
+        "wires": [
+            [
+                "75d7f7af.d43108",
+                "3be9aec3.702e52"
+            ]
+        ]
+    },
+    {
+        "id": "1edd2383.0a35dc",
+        "type": "wunderground",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "lon": "",
+        "lat": "",
+        "city": "",
+        "country": "",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "5aa5f69c.52bbc8",
+                "2675d75c.b381a8"
+            ]
+        ]
+    },
+    {
+        "id": "3be9aec3.702e52",
+        "type": "change",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "location.lat",
+                "pt": "msg",
+                "to": "payload.results[0].geometry.location.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "location.lon",
+                "pt": "msg",
+                "to": "payload.results[0].geometry.location.lng",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 860,
+        "y": 80,
+        "wires": [
+            [
+                "ae87bf71.77626",
+                "1edd2383.0a35dc"
+            ]
+        ]
+    },
+    {
+        "id": "5aa5f69c.52bbc8",
+        "type": "debug",
+        "z": "4cb0b021.92731",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 350,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "2675d75c.b381a8",
+        "type": "switch",
+        "z": "4cb0b021.92731",
+        "name": "TempCheck",
+        "property": "payload.tempc",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "12",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "12",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "5dbc653d.ae644c"
+            ],
+            [
+                "2972d53c.0ec8fa"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5dbc653d.ae644c",
+        "type": "function",
+        "z": "4cb0b021.92731",
+        "name": "SetCandleFlashingBlueCold",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n//00 7e ff 00 00 00 19 00\"\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":0,\n\"speed1\":0,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 260,
+        "wires": [
+            [
+                "e27bc79f.7e7528"
+            ]
+        ]
+    },
+    {
+        "id": "e27bc79f.7e7528",
+        "type": "ibmiot out",
+        "z": "4cb0b021.92731",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 820,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "2972d53c.0ec8fa",
+        "type": "function",
+        "z": "4cb0b021.92731",
+        "name": "Set Color Red Hot",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0\n    \n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 570,
+        "y": 300,
+        "wires": [
+            [
+                "e27bc79f.7e7528"
+            ]
+        ]
+    }
+]

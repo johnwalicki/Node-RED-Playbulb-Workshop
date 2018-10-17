@@ -1,0 +1,486 @@
+[
+    {
+        "id": "4ec35d.d5bfd4a4",
+        "type": "tab",
+        "label": "Joystick Candle"
+    },
+    {
+        "id": "949aa7df.1f0b3",
+        "type": "ibmiot in",
+        "z": "4ec35d.d5bfd4a4",
+        "authentication": "boundService",
+        "apiKey": "",
+        "inputType": "evt",
+        "deviceId": "RasPi-Sensehat",
+        "applicationId": "",
+        "deviceType": "SenseHat",
+        "eventType": "+",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "registered",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": "",
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": "",
+        "qos": 0,
+        "x": 70,
+        "y": 80,
+        "wires": [
+            [
+                "c34b4065.1b0768",
+                "dd92e237.eedcb",
+                "6bd35fe5.9b4e68"
+            ]
+        ]
+    },
+    {
+        "id": "c34b4065.1b0768",
+        "type": "debug",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 310,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6bd35fe5.9b4e68",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Add timestamp to DB Record",
+        "func": "return {\n    payload: {\n        time: new Date().getTime(),\n        shock: msg.payload\n    }\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "24173482.2c2cbc"
+            ]
+        ]
+    },
+    {
+        "id": "24173482.2c2cbc",
+        "type": "cloudant out",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "cloudant": "",
+        "database": "rasppi-sensehat-joystick-event",
+        "service": "walicki-playbulb-cloudantNoSQLDB",
+        "payonly": true,
+        "operation": "insert",
+        "x": 700,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a607b340.a7cc4",
+        "type": "http in",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "url": "/api/readings",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 580,
+        "wires": [
+            [
+                "c4301e40.64b958"
+            ]
+        ]
+    },
+    {
+        "id": "c4301e40.64b958",
+        "type": "cloudant in",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "cloudant": "",
+        "database": "rasppi-sensehat-joystick-event",
+        "service": "walicki-playbulb-cloudantNoSQLDB",
+        "search": "_all_",
+        "design": "",
+        "index": "",
+        "x": 440,
+        "y": 580,
+        "wires": [
+            [
+                "7ddb5579.0a656c"
+            ]
+        ]
+    },
+    {
+        "id": "7ddb5579.0a656c",
+        "type": "http response",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "x": 720,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "9709d956.bab648",
+        "type": "comment",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Joystick Data from Raspberry Pi Sensehat",
+        "info": "",
+        "x": 180,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "dd92e237.eedcb",
+        "type": "switch",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Joystick Detector",
+        "property": "payload.d.key",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "UP",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "DOWN",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "RIGHT",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "LEFT",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 5,
+        "x": 330,
+        "y": 180,
+        "wires": [
+            [
+                "d6c9b9f0.dd0bd",
+                "257ec8b3.a6c6a"
+            ],
+            [
+                "69af46b4.a87e1",
+                "257ec8b3.a6c6a"
+            ],
+            [
+                "c7099a42.a5f628",
+                "257ec8b3.a6c6a"
+            ],
+            [
+                "d66e79a2.b4b8d",
+                "257ec8b3.a6c6a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d6c9b9f0.dd0bd",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "SetColorYellow-UP",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 100,
+        "wires": [
+            [
+                "6884bfdc.12f16",
+                "cf4a6a4f.c81bd"
+            ]
+        ]
+    },
+    {
+        "id": "6884bfdc.12f16",
+        "type": "ibmiot out",
+        "z": "4ec35d.d5bfd4a4",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 860,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "69af46b4.a87e1",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "SetColorRed-DOWN",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 140,
+        "wires": [
+            [
+                "6884bfdc.12f16"
+            ]
+        ]
+    },
+    {
+        "id": "d66e79a2.b4b8d",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "SetColorGreen-LEFT",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 220,
+        "wires": [
+            [
+                "6884bfdc.12f16"
+            ]
+        ]
+    },
+    {
+        "id": "c7099a42.a5f628",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "SetColorBlue-RIGHT",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 180,
+        "wires": [
+            [
+                "6884bfdc.12f16"
+            ]
+        ]
+    },
+    {
+        "id": "cf4a6a4f.c81bd",
+        "type": "debug",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 870,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "456598d8.d09ac",
+        "type": "comment",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Set the Playbulb color",
+        "info": "",
+        "x": 900,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "97c3ab30.056fd",
+        "type": "twitter out",
+        "z": "4ec35d.d5bfd4a4",
+        "twitter": "",
+        "name": "Tweet",
+        "x": 990,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "abfffc0b.2a5148",
+        "type": "delay",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 820,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ee8a407a.04997",
+        "type": "twilio out",
+        "z": "4ec35d.d5bfd4a4",
+        "service": "_ext_",
+        "twilio": "27625f95.4d08d",
+        "from": "",
+        "number": "5514860924",
+        "name": "",
+        "x": 1020,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "44f4f127.24182",
+        "type": "debug",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 870,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "257ec8b3.a6c6a",
+        "type": "template",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Format a message",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "The joystick is {{payload.d.key}} !",
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "44f4f127.24182",
+                "abfffc0b.2a5148"
+            ]
+        ]
+    },
+    {
+        "id": "e16031a9.f482d8",
+        "type": "twilio out",
+        "z": "4ec35d.d5bfd4a4",
+        "service": "Twilio-6z",
+        "twilio": "27625f95.4d08d",
+        "from": "5512226866",
+        "number": "5514860924",
+        "name": "",
+        "x": 1000,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ee75e2fc.83c368",
+        "type": "inject",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "topic": "",
+        "payload": "John is a nerd",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 610,
+        "y": 400,
+        "wires": [
+            [
+                "e16031a9.f482d8"
+            ]
+        ]
+    },
+    {
+        "id": "409bc795.b5c0b",
+        "type": "inject",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Call me Now",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 230,
+        "y": 660,
+        "wires": [
+            [
+                "c2b33585.b595e"
+            ]
+        ]
+    },
+    {
+        "id": "c2b33585.b595e",
+        "type": "function",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Twilio Voice Payload",
+        "func": "return {\n     payload : {\"From\":\"+15512226866\",\n                \"To\":\"+15514860924\",\n                \"Url\":\"http://demo.twilio.com/docs/voice.xml\"\n     }, \n     headers : { \"Content-Type\":\"application/x-www-form-urlencoded\" }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 660,
+        "wires": [
+            [
+                "f1d12047.eab478"
+            ]
+        ]
+    },
+    {
+        "id": "f1d12047.eab478",
+        "type": "http request",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Twilio API Call",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/ACc662d8bec298af6e95e6e4194cf7ce3b/Calls.json",
+        "tls": "",
+        "x": 650,
+        "y": 660,
+        "wires": [
+            [
+                "20325ddc.d58c22"
+            ]
+        ]
+    },
+    {
+        "id": "20325ddc.d58c22",
+        "type": "debug",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 890,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "b7372e59.c5e92",
+        "type": "comment",
+        "z": "4ec35d.d5bfd4a4",
+        "name": "Twilio Voice Call",
+        "info": "",
+        "x": 220,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "27625f95.4d08d",
+        "type": "twilio-api",
+        "z": "",
+        "sid": "ACc662d8bec298af6e95e6e4194cf7ce3b",
+        "from": "(551) 222-6866 ",
+        "name": ""
+    }
+]

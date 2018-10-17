@@ -1,0 +1,608 @@
+[
+    {
+        "id": "6bd4fedc.003758",
+        "type": "tab",
+        "label": "Playbulb controller",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "10e9b87a.619b",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "SetColorYellow-Joy",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 200,
+        "wires": [
+            [
+                "e0a802c6.308cb",
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "f26548d6.cdfe6",
+        "type": "switch",
+        "z": "6bd4fedc.003758",
+        "name": "SelectColor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "blue",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "purple",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pink",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "party",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 8,
+        "x": 270,
+        "y": 460,
+        "wires": [
+            [
+                "10e9b87a.619b",
+                "36b0c02d.f68c2",
+                "2205956b.f668ca"
+            ],
+            [
+                "9d7a3743.d163c",
+                "866d5584.d1dc5"
+            ],
+            [
+                "c56b6117.e6ae2",
+                "fe95b95b.5e1a58"
+            ],
+            [
+                "41230bf.50404f4",
+                "c4eb520d.d28ef"
+            ],
+            [
+                "840f9e31.7e6478",
+                "ad91ee4.061dc1"
+            ],
+            [
+                "e381179.1ccbde8",
+                "ccaf222a.5d3848"
+            ],
+            [
+                "8dc3283d.cd92b"
+            ],
+            [
+                "923fc071.f17ab8",
+                "6ac738d9.519b68"
+            ]
+        ]
+    },
+    {
+        "id": "9d7a3743.d163c",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "SetColorRed-Fear",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 280,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "41230bf.50404f4",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "SetColorGreen-Anger",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "c56b6117.e6ae2",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "SetColorBlue-Sadness",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 360,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "e0a802c6.308cb",
+        "type": "debug",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 910,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "923fc071.f17ab8",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "SetColorOtherOff",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":0,\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 720,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "e381179.1ccbde8",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "Set Color Pink",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 8,\n\"gg\" : 253,\n\"bb\" : 222,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 580,
+        "y": 600,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "caf3f8e5.db76c",
+        "type": "link in",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "links": [],
+        "x": 55,
+        "y": 60,
+        "wires": [
+            [
+                "18d971a6.8b48e6"
+            ]
+        ]
+    },
+    {
+        "id": "7200d8ba.ee9888",
+        "type": "debug",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 510,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "18d971a6.8b48e6",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "Extract color from message",
+        "func": "var color = \"\";\n\nif( msg.payload.includes(\"yellow\") ) {\n    color = \"yellow\";\n} else if ( msg.payload.includes(\"red\") ) { \n    color = \"red\";\n} else if ( msg.payload.includes(\"read\") ) {\n    color = \"red\";\n} else if (msg.payload.includes(\"blue\") ) {\n    color = \"blue\";\n} else if ( msg.payload.includes(\"green\") ) {\n    color = \"green\";\n} else if ( msg.payload.includes(\"purple\") ) {\n    color = \"purple\";\n} else if ( msg.payload.includes(\"pink\") ) {\n    color = \"pink\";\n} else if ( msg.payload.includes(\"party\") ) {\n    color = \"party\";\n}\nmsg.payload = color;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 240,
+        "y": 100,
+        "wires": [
+            [
+                "7200d8ba.ee9888",
+                "f26548d6.cdfe6"
+            ]
+        ]
+    },
+    {
+        "id": "8dc3283d.cd92b",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "Party!",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 680,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "cb0d9ce4.bce98",
+        "type": "link in",
+        "z": "6bd4fedc.003758",
+        "name": "Playbulb Controller",
+        "links": [
+            "258d44c2.0366ac",
+            "87568bfe.13213",
+            "9b16e757.c8fb5",
+            "c4cf5c52.9548"
+        ],
+        "x": 55,
+        "y": 140,
+        "wires": [
+            [
+                "18d971a6.8b48e6"
+            ]
+        ]
+    },
+    {
+        "id": "5eb323fe.d830ac",
+        "type": "inject",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "topic": "",
+        "payload": "yellow",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 94,
+        "y": 206,
+        "wires": [
+            [
+                "18d971a6.8b48e6"
+            ]
+        ]
+    },
+    {
+        "id": "e922ab27.a2aa3",
+        "type": "wiotp out",
+        "z": "6bd4fedc.003758",
+        "authType": "d",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "889e51dc.550b78",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "setColor",
+        "format": "json",
+        "qos": "",
+        "name": "",
+        "x": 900,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "840f9e31.7e6478",
+        "type": "function",
+        "z": "6bd4fedc.003758",
+        "name": "Set Color Purple",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 128,\n\"gg\" : 0,\n\"bb\" : 128,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 520,
+        "wires": [
+            [
+                "e922ab27.a2aa3"
+            ]
+        ]
+    },
+    {
+        "id": "18892288.b56a7d",
+        "type": "rpi-neopixels",
+        "z": "6bd4fedc.003758",
+        "name": "Turn on light",
+        "pixels": "1",
+        "bgnd": "",
+        "fgnd": "",
+        "wipe": "40",
+        "mode": "pcent",
+        "rgb": "rgb",
+        "brightness": "100",
+        "gamma": true,
+        "x": 910,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "60d5a4c1.076124",
+        "type": "debug",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 910,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "866d5584.d1dc5",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Red Color - Fear",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0,255,0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "60d5a4c1.076124",
+                "18892288.b56a7d"
+            ]
+        ]
+    },
+    {
+        "id": "c4eb520d.d28ef",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Green Color - Anger",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "255,0,0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 480,
+        "wires": [
+            [
+                "60d5a4c1.076124",
+                "18892288.b56a7d"
+            ]
+        ]
+    },
+    {
+        "id": "fe95b95b.5e1a58",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Blue Color - Sadness",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0,0,255",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "18892288.b56a7d",
+                "60d5a4c1.076124"
+            ]
+        ]
+    },
+    {
+        "id": "36b0c02d.f68c2",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Yellow Color - Joy",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "255,255,0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 240,
+        "wires": [
+            [
+                "60d5a4c1.076124",
+                "18892288.b56a7d"
+            ]
+        ]
+    },
+    {
+        "id": "ad91ee4.061dc1",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Purple Color - Disgust",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "44,116,163",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 560,
+        "wires": [
+            [
+                "18892288.b56a7d",
+                "60d5a4c1.076124"
+            ]
+        ]
+    },
+    {
+        "id": "6ac738d9.519b68",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Off - Other",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0,0,0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 760,
+        "wires": [
+            [
+                "18892288.b56a7d",
+                "60d5a4c1.076124"
+            ]
+        ]
+    },
+    {
+        "id": "2205956b.f668ca",
+        "type": "trigger",
+        "z": "6bd4fedc.003758",
+        "op1": "40",
+        "op2": "0",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "3",
+        "extend": false,
+        "units": "s",
+        "reset": "",
+        "name": "",
+        "x": 560,
+        "y": 160,
+        "wires": [
+            [
+                "ad3449fd.cc646"
+            ]
+        ]
+    },
+    {
+        "id": "ad3449fd.cc646",
+        "type": "rpi-gpio out",
+        "z": "6bd4fedc.003758",
+        "name": "",
+        "pin": "37",
+        "set": "",
+        "level": "0",
+        "out": "pwm",
+        "x": 900,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ccaf222a.5d3848",
+        "type": "change",
+        "z": "6bd4fedc.003758",
+        "name": "Pink Color",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "8,253,222",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 570,
+        "y": 640,
+        "wires": [
+            [
+                "18892288.b56a7d",
+                "60d5a4c1.076124"
+            ]
+        ]
+    },
+    {
+        "id": "889e51dc.550b78",
+        "type": "wiotp-credentials",
+        "z": "",
+        "name": "",
+        "org": "5yrusp",
+        "serverName": "",
+        "devType": "raspi",
+        "devId": "PiController",
+        "keepalive": "60",
+        "cleansession": true,
+        "tls": "",
+        "usetls": false
+    }
+]

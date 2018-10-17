@@ -1,0 +1,578 @@
+[
+    {
+        "id": "bc2530ab.787e08",
+        "type": "tab",
+        "label": "Voice ChatBot"
+    },
+    {
+        "id": "a6ea6663.2a285",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1110,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "66fb768e.9f9b5",
+        "type": "watson-conversation-v1",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "workspaceid": "f6481a40-8ea9-4de1-8acf-4b3c846bba05",
+        "multiuser": false,
+        "context": false,
+        "x": 910,
+        "y": 80,
+        "wires": [
+            [
+                "a6ea6663.2a285",
+                "1b512f5.8d9f1d1"
+            ]
+        ]
+    },
+    {
+        "id": "14b625a7.4f1262",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 670,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "783313e4.5890f4",
+        "type": "switch",
+        "z": "bc2530ab.787e08",
+        "name": "Intents",
+        "property": "payload.intents[0].intent",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "SetColor",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "whatcolors",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 250,
+        "y": 300,
+        "wires": [
+            [
+                "aebf6243.7a0c6",
+                "6c22222f.d756d4"
+            ],
+            [
+                "6c22222f.d756d4"
+            ]
+        ]
+    },
+    {
+        "id": "90463561.a0d258",
+        "type": "comment",
+        "z": "bc2530ab.787e08",
+        "name": "Reply to the SlackBot",
+        "info": "",
+        "x": 960,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "46dbe72b.c94a48",
+        "type": "change",
+        "z": "bc2530ab.787e08",
+        "name": "Pass the recorded transcript to Conversation",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "transcription",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 80,
+        "wires": [
+            [
+                "66fb768e.9f9b5"
+            ]
+        ]
+    },
+    {
+        "id": "bca782c0.5e8828",
+        "type": "watson-text-to-speech",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "lang": "en-US",
+        "langhidden": "en-US",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "",
+        "voice": "en-US_AllisonVoice",
+        "voicehidden": "",
+        "format": "audio/wav",
+        "password": "5824BY7NvNkT",
+        "x": 670,
+        "y": 540,
+        "wires": [
+            [
+                "b285120.de578f",
+                "5ee9d0e9.58d3e8"
+            ]
+        ]
+    },
+    {
+        "id": "b285120.de578f",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 870,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "5ee9d0e9.58d3e8",
+        "type": "change",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "speech",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 880,
+        "y": 540,
+        "wires": [
+            [
+                "5b88dcb1.324c8c",
+                "409e644d.49c6f4"
+            ]
+        ]
+    },
+    {
+        "id": "97273e40.55c3a",
+        "type": "watson-speech-to-text",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "speakerlabels": false,
+        "lang": "en-US",
+        "langhidden": "en-US",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "NoCustomisationSetting",
+        "band": "BroadbandModel",
+        "bandhidden": "BroadbandModel",
+        "password": "pAJYZ8x4Ph7t",
+        "x": 300,
+        "y": 80,
+        "wires": [
+            [
+                "eaa3524.e8f00b",
+                "46dbe72b.c94a48"
+            ]
+        ]
+    },
+    {
+        "id": "eaa3524.e8f00b",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "transcription",
+        "x": 550,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "27c95c5.2c191a4",
+        "type": "microphone",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "97273e40.55c3a",
+                "c4a37025.6184b"
+            ]
+        ]
+    },
+    {
+        "id": "fe9ccf46.44b348",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorYellow",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 900,
+        "y": 200,
+        "wires": [
+            [
+                "698bfd9c.822414",
+                "e40a0e77.dfac"
+            ]
+        ]
+    },
+    {
+        "id": "698bfd9c.822414",
+        "type": "ibmiot out",
+        "z": "bc2530ab.787e08",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 1180,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "f7993c2.2772ec",
+        "type": "switch",
+        "z": "bc2530ab.787e08",
+        "name": "SelectColor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "blue",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "purple",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "party",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 7,
+        "x": 670,
+        "y": 300,
+        "wires": [
+            [
+                "fe9ccf46.44b348"
+            ],
+            [
+                "f54ab4be.352aa8"
+            ],
+            [
+                "6cd985ac.901a7c"
+            ],
+            [
+                "439fbc78.76d66c"
+            ],
+            [
+                "4f80b43c.39faec"
+            ],
+            [
+                "8c5d59bc.0e4218"
+            ],
+            [
+                "8f376bab.09c93"
+            ]
+        ]
+    },
+    {
+        "id": "f54ab4be.352aa8",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorRed",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 240,
+        "wires": [
+            [
+                "698bfd9c.822414"
+            ]
+        ]
+    },
+    {
+        "id": "439fbc78.76d66c",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorGreen",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 900,
+        "y": 320,
+        "wires": [
+            [
+                "698bfd9c.822414"
+            ]
+        ]
+    },
+    {
+        "id": "6cd985ac.901a7c",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorBlue",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 280,
+        "wires": [
+            [
+                "698bfd9c.822414"
+            ]
+        ]
+    },
+    {
+        "id": "e40a0e77.dfac",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1150,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "8f376bab.09c93",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorOtherOff",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 910,
+        "y": 440,
+        "wires": [
+            [
+                "698bfd9c.822414"
+            ]
+        ]
+    },
+    {
+        "id": "4f80b43c.39faec",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColorPurple",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 238,\n\"gg\" : 130,\n\"bb\" : 238,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 900,
+        "y": 360,
+        "wires": [
+            [
+                "698bfd9c.822414"
+            ]
+        ]
+    },
+    {
+        "id": "8c5d59bc.0e4218",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "SetColor Party!",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n}\nmsg.payload=playbulbmsg ;\nmsg.eventOrCommandType = \"setCandleMode\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 900,
+        "y": 400,
+        "wires": [
+            [
+                "698bfd9c.822414",
+                "e40a0e77.dfac"
+            ]
+        ]
+    },
+    {
+        "id": "6a2b4c24.8293c4",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 670,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "aebf6243.7a0c6",
+        "type": "change",
+        "z": "bc2530ab.787e08",
+        "name": "Color Entities",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.entities[0].value",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 300,
+        "wires": [
+            [
+                "6a2b4c24.8293c4",
+                "f7993c2.2772ec"
+            ]
+        ]
+    },
+    {
+        "id": "6c22222f.d756d4",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "Watson Conversation Reply",
+        "func": "var response = msg.payload.output.text[0] ;\nif (typeof msg.payload.entities[0] !== 'undefined') {\n    if (typeof msg.payload.entities[0].value !== 'undefined') {\n        response = response +\" to \"+ msg.payload.entities[0].value ;\n    }\n}\nmsg.payload = response;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 420,
+        "y": 540,
+        "wires": [
+            [
+                "bca782c0.5e8828",
+                "14b625a7.4f1262"
+            ]
+        ]
+    },
+    {
+        "id": "c4a37025.6184b",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 289,
+        "y": 121,
+        "wires": []
+    },
+    {
+        "id": "2faf2965.750c3e",
+        "type": "comment",
+        "z": "bc2530ab.787e08",
+        "name": "What colors can I change the Playbulb?",
+        "info": "",
+        "x": 180,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "5b88dcb1.324c8c",
+        "type": "play audio",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "x": 1070,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "409e644d.49c6f4",
+        "type": "debug",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1070,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "759f67f2.a605",
+        "type": "inject",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "topic": "",
+        "payload": "John is a nerd",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 490,
+        "y": 480,
+        "wires": [
+            [
+                "bca782c0.5e8828"
+            ]
+        ]
+    },
+    {
+        "id": "1b512f5.8d9f1d1",
+        "type": "function",
+        "z": "bc2530ab.787e08",
+        "name": "",
+        "func": "if( typeof msg.payload.intents != 'undefined') {\n    if( typeof msg.payload.intents[0].intent != 'undefined') {\n        return msg;\n    }\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "783313e4.5890f4"
+            ]
+        ]
+    }
+]

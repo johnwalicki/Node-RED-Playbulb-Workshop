@@ -1,0 +1,449 @@
+[
+    {
+        "id": "f2148608.7b2218",
+        "type": "tab",
+        "label": "Image Text Extraction"
+    },
+    {
+        "id": "d90a0773.e762e8",
+        "type": "change",
+        "z": "f2148608.7b2218",
+        "name": "Extract image URL",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.imageurl",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "3d45dac5.f2af0e",
+                "985913bb.788688"
+            ]
+        ]
+    },
+    {
+        "id": "c1aa04c7.d56888",
+        "type": "switch",
+        "z": "f2148608.7b2218",
+        "name": "Check image url",
+        "property": "payload.imageurl",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 320,
+        "y": 80,
+        "wires": [
+            [
+                "4ae1bc2e.14e7cc"
+            ],
+            [
+                "d90a0773.e762e8"
+            ]
+        ]
+    },
+    {
+        "id": "b18d9ae7.7ffd38",
+        "type": "http in",
+        "z": "f2148608.7b2218",
+        "name": "",
+        "url": "/colortext",
+        "method": "get",
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "c1aa04c7.d56888"
+            ]
+        ]
+    },
+    {
+        "id": "4ae1bc2e.14e7cc",
+        "type": "template",
+        "z": "f2148608.7b2218",
+        "name": "Prompt images",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Welcome to a Watson Visual Recognition Image Text Extract app</h1>\n<H2>Provide a URL to a picture / image that has text to analyze</H2>\n<form  action=\"{{req._parsedUrl.pathname}}\">\n    <img src=\"https://s-media-cache-ak0.pinimg.com/originals/78/53/f1/7853f12bc769cffc8761378df3a94296.jpg\" height='200'/>\n    <img src=\"https://s-media-cache-ak0.pinimg.com/564x/06/e1/7f/06e17f57b679f6e680e1958369f38252.jpg\" height='200'/>\n    <img src=\"https://s-media-cache-ak0.pinimg.com/originals/23/ef/48/23ef48f9b14493fa3873872e6aabc910.jpg\" height='200'/>\n        <br/>Right-click one of the above images and select Copy image location and paste the URL in the box below.<br>Do an image search for faces, try multiple faces. After you click on an image, to the right it usually says \"View image\" click that to get the URL.<br/>\n    <br>Image URL: <input type=\"text\" name=\"imageurl\"/>\n    <input type=\"submit\" value=\"Analyze\"/>\n</form>",
+        "x": 680,
+        "y": 80,
+        "wires": [
+            [
+                "b522265.51fa958"
+            ]
+        ]
+    },
+    {
+        "id": "50199667.97002",
+        "type": "template",
+        "z": "f2148608.7b2218",
+        "name": "Report Object via HTML template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<h1>Visual Recognition v3 Image Analysis</h1>\n    <p>Analyzed image: {{result.images.0.resolved_url}}<br/><img id=\"image\" src=\"{{result.images.0.resolved_url}}\" height=\"200\"/></p>\n    {{^result}}\n        <P>No Face detected</P>\n    {{/result}}\n    <p>Images Processed: {{result.images_processed}}</p>\n    <p>Found {{result.images.0.text}}</p>\n    <form  action=\"{{req._parsedUrl.pathname}}\">\n        <br><input type=\"submit\" value=\"Try again or go back to the home page\"/>\n    </form>",
+        "x": 840,
+        "y": 200,
+        "wires": [
+            [
+                "b522265.51fa958"
+            ]
+        ]
+    },
+    {
+        "id": "b522265.51fa958",
+        "type": "http response",
+        "z": "f2148608.7b2218",
+        "name": "",
+        "x": 1110,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "ad0f74b3.fdffd8",
+        "type": "debug",
+        "z": "f2148608.7b2218",
+        "name": "Print msg.result.images",
+        "active": true,
+        "console": "false",
+        "complete": "result.images",
+        "x": 810,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d3a82e9e.799ba8",
+        "type": "comment",
+        "z": "f2148608.7b2218",
+        "name": "Step #1 - Create a Visual Recognition Service",
+        "info": "1. Log into your Bluemix account\n2. Navigate to the Bluemix Catalog\n3. Scroll to the Watson Services section\n4. Find and click on the Visual Recognition service\n5. Create an unbounded Visual Recognition instance\n6. Open the new service and navigate to the Service Credentials\n7. Copy the api_key to the clipboard\n8. Open the above \"visual recognition v3\" node and paste your new API Key",
+        "x": 590,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3d45dac5.f2af0e",
+        "type": "debug",
+        "z": "f2148608.7b2218",
+        "name": "URL",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 350,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "985913bb.788688",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "Custom?",
+        "func": "msg.params = {};\nmsg.params[\"classifier_ids\"]=\"Asymmetry_64254664,default\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "6747392a.716ad"
+            ]
+        ]
+    },
+    {
+        "id": "b7b90ef2.7469e",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "Text in Image",
+        "func": "var image_text = msg.result.images[0].text;\nmsg.payload = image_text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 280,
+        "wires": [
+            [
+                "8b95b29c.cf309"
+            ]
+        ]
+    },
+    {
+        "id": "8b95b29c.cf309",
+        "type": "debug",
+        "z": "f2148608.7b2218",
+        "name": "Text found",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1070,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4cd237ab.f02bf",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorYellow-Joy",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 340,
+        "wires": [
+            [
+                "c4010c3f.850de",
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "13e4732d.73a4c5",
+        "type": "switch",
+        "z": "f2148608.7b2218",
+        "name": "SelectColor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "blue",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pink",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "party",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 7,
+        "x": 530,
+        "y": 440,
+        "wires": [
+            [
+                "4cd237ab.f02bf"
+            ],
+            [
+                "f4ae14d.31534e8"
+            ],
+            [
+                "dba5c1ee.2bcef"
+            ],
+            [
+                "8377a298.d07f88"
+            ],
+            [
+                "369dd8e4.9bdf58"
+            ],
+            [
+                "532be54d.50aa94"
+            ],
+            [
+                "dba227c0.688128"
+            ]
+        ]
+    },
+    {
+        "id": "f4ae14d.31534e8",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorRed-Fear",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 380,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "8377a298.d07f88",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorGreen-Anger",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 460,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "dba5c1ee.2bcef",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorBlue-Sadness",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 420,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "c4010c3f.850de",
+        "type": "debug",
+        "z": "f2148608.7b2218",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1070,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "dba227c0.688128",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorOtherOff",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":0,\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 580,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "369dd8e4.9bdf58",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "SetColorPink",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 105,\n\"bb\" : 180,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 500,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "fd0db63a.16518",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "Extract color from message",
+        "func": "var color = \"\";\nvar image_text = msg.result.images[0].text;\nmsg.payload = image_text;\n\nif( msg.payload.includes(\"yellow\") ) {\n    color = \"yellow\";\n} else if ( msg.payload.includes(\"red\") ) { \n    color = \"red\";\n} else if ( msg.payload.includes(\"read\") ) {\n    color = \"red\";\n} else if (msg.payload.includes(\"blue\") ) {\n    color = \"blue\";\n} else if ( msg.payload.includes(\"green\") ) {\n    color = \"green\";\n} else if ( msg.payload.includes(\"pink\") ) {\n    color = \"pink\";\n} else if ( msg.payload.includes(\"party\") ) {\n    color = \"party\";\n}\nmsg.payload = color;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 260,
+        "y": 440,
+        "wires": [
+            [
+                "13e4732d.73a4c5"
+            ]
+        ]
+    },
+    {
+        "id": "532be54d.50aa94",
+        "type": "function",
+        "z": "f2148608.7b2218",
+        "name": "Party!",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n}\nmsg = {};\n\n// now set the new msg object\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=playbulbmsg;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 540,
+        "wires": [
+            [
+                "616bf152.630138"
+            ]
+        ]
+    },
+    {
+        "id": "616bf152.630138",
+        "type": "ibmiot out",
+        "z": "f2148608.7b2218",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 1060,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6747392a.716ad",
+        "type": "visual-recognition-v3",
+        "z": "f2148608.7b2218",
+        "name": "",
+        "image-feature": "recognizeText",
+        "lang": "",
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "50199667.97002",
+                "ad0f74b3.fdffd8",
+                "b7b90ef2.7469e"
+            ]
+        ]
+    }
+]

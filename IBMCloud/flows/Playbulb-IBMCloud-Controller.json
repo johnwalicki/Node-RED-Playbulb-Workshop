@@ -1,0 +1,399 @@
+[
+    {
+        "id": "c3f43d92.3f4a6",
+        "type": "tab",
+        "label": "Control from Pi"
+    },
+    {
+        "id": "efed133a.6999f",
+        "type": "ibmiot in",
+        "z": "c3f43d92.3f4a6",
+        "authentication": "boundService",
+        "apiKey": "",
+        "inputType": "evt",
+        "logicalInterface": "",
+        "ruleId": "",
+        "deviceId": "PiController",
+        "applicationId": "",
+        "deviceType": "raspi",
+        "eventType": "setColor",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT App In",
+        "service": "registered",
+        "allDevices": false,
+        "allApplications": false,
+        "allDeviceTypes": false,
+        "allLogicalInterfaces": false,
+        "allEvents": false,
+        "allCommands": false,
+        "allFormats": true,
+        "qos": "0",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "1be6248.11ee85c",
+                "59818196.3f4fb"
+            ]
+        ]
+    },
+    {
+        "id": "76705f89.2ae4a8",
+        "type": "ibmiot out",
+        "z": "c3f43d92.3f4a6",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 680,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "bceed627.5015a8",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 520,
+        "wires": [
+            [
+                "7e44ce1.8984a3"
+            ]
+        ]
+    },
+    {
+        "id": "7e44ce1.8984a3",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "SetColorRed",
+        "func": "var newmsg = {\"cmd\" : \"setColor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0\n    \n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 520,
+        "wires": [
+            [
+                "76705f89.2ae4a8",
+                "36a38b0d.8005d4"
+            ]
+        ]
+    },
+    {
+        "id": "36a38b0d.8005d4",
+        "type": "debug",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 690,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "b8d7dff9.aee9d8",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "setModeCandleLight",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n// mode =01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":\"1\",\n\"speed1\":0,\n\"speed2\":255,\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0\n    \n}\nmsg.eventOrCommandType = \"setModeCandleLight\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "ddd0be22.5dd0c8",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "6290c64b.009288"
+            ]
+        ]
+    },
+    {
+        "id": "20fdf712.86a4f8",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "setCandleMode=FADEDGB=03",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":1,\n\"speed1\":48,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 390,
+        "y": 320,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "f4c941e4.be8d98",
+        "type": "comment",
+        "z": "c3f43d92.3f4a6",
+        "name": "Get Voice or Image Color commands From Pi",
+        "info": "",
+        "x": 210,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "5d9d6013.3e009",
+        "type": "comment",
+        "z": "c3f43d92.3f4a6",
+        "name": "Candle Modes",
+        "info": "01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect",
+        "x": 124,
+        "y": 233.25,
+        "wires": []
+    },
+    {
+        "id": "b917db11.3bcc3",
+        "type": "comment",
+        "z": "c3f43d92.3f4a6",
+        "name": "SetCandleColors",
+        "info": "01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect",
+        "x": 120,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "6290c64b.009288",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "setCandleMode=Jump=02",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380,
+        "y": 360,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "20f78c8e.80e414",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "b8d7dff9.aee9d8"
+            ]
+        ]
+    },
+    {
+        "id": "e209c813.b21118",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 320,
+        "wires": [
+            [
+                "20fdf712.86a4f8"
+            ]
+        ]
+    },
+    {
+        "id": "3e41d1a.9ce53ae",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "setCandleMode=Flashing",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n//00 7e ff 00 00 00 19 00\"\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":0,\n\"speed1\":19,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 370,
+        "y": 400,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "17aba09b.e6b6a7",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 400,
+        "wires": [
+            [
+                "3e41d1a.9ce53ae"
+            ]
+        ]
+    },
+    {
+        "id": "a5b2c3bb.3ef428",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "setCandleMode=Rainbow",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n//00ff00ff 02 00 5f00\"\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":02,\n\"speed1\":95,\n\"speed2\":0,\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 255\n    \n}\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 370,
+        "y": 440,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "c40ff2f8.35feb",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 440,
+        "wires": [
+            [
+                "a5b2c3bb.3ef428"
+            ]
+        ]
+    },
+    {
+        "id": "ba4def5f.ae37d8",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "SetColorGreen",
+        "func": "var newmsg = {\"cmd\" : \"setColor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0\n    \n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 340,
+        "y": 560,
+        "wires": [
+            [
+                "76705f89.2ae4a8"
+            ]
+        ]
+    },
+    {
+        "id": "787a5163.e19888",
+        "type": "inject",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 560,
+        "wires": [
+            [
+                "ba4def5f.ae37d8"
+            ]
+        ]
+    },
+    {
+        "id": "1be6248.11ee85c",
+        "type": "debug",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 500,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "59818196.3f4fb",
+        "type": "function",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "func": "msg = { payload : msg.payload.d };\nif ( msg.payload.mode == 2) {\n   msg.eventOrCommandType = \"setCandleMode\";\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "76705f89.2ae4a8",
+                "21c7e2cc.7c0076"
+            ]
+        ]
+    },
+    {
+        "id": "21c7e2cc.7c0076",
+        "type": "debug",
+        "z": "c3f43d92.3f4a6",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 600,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "56f8ea53.25b73c",
+        "type": "comment",
+        "z": "c3f43d92.3f4a6",
+        "name": "MQTT to Playbulb",
+        "info": "",
+        "x": 710,
+        "y": 340,
+        "wires": []
+    }
+]

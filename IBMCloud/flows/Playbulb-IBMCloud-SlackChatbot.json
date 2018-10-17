@@ -1,0 +1,464 @@
+[
+    {
+        "id": "a4706b2f.30b558",
+        "type": "tab",
+        "label": "SlackBot",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "5a8a4f85.6f9398",
+        "type": "http in",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "url": "/slackbot",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "bf29e961.37d118",
+                "43714490.a2ce84",
+                "f7412a15.d04c2"
+            ]
+        ]
+    },
+    {
+        "id": "3afc298c.6a2fbe",
+        "type": "http response",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "x": 630,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "bf29e961.37d118",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "43714490.a2ce84",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload.text",
+        "x": 410,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "db017e8b.2e8498",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorYellow",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760,
+        "y": 240,
+        "wires": [
+            [
+                "31916ee1.f17eaa",
+                "1045831e.c1edd5"
+            ]
+        ]
+    },
+    {
+        "id": "31916ee1.f17eaa",
+        "type": "ibmiot out",
+        "z": "a4706b2f.30b558",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 1040,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "f10bc5ef.c4d3e8",
+        "type": "switch",
+        "z": "a4706b2f.30b558",
+        "name": "SelectColor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "yellow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "red",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "blue",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "green",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "purple",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "party",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 7,
+        "x": 530,
+        "y": 340,
+        "wires": [
+            [
+                "db017e8b.2e8498"
+            ],
+            [
+                "49e394b3.866354"
+            ],
+            [
+                "afa1953d.92c24"
+            ],
+            [
+                "4e680c62.4052e4"
+            ],
+            [
+                "60a7b381.0fff5c"
+            ],
+            [
+                "27ead8b1.67cff8"
+            ],
+            [
+                "e3e57c0a.0bf8a"
+            ]
+        ]
+    },
+    {
+        "id": "49e394b3.866354",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorRed",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 280,
+        "wires": [
+            [
+                "31916ee1.f17eaa"
+            ]
+        ]
+    },
+    {
+        "id": "4e680c62.4052e4",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorGreen",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760,
+        "y": 360,
+        "wires": [
+            [
+                "31916ee1.f17eaa"
+            ]
+        ]
+    },
+    {
+        "id": "afa1953d.92c24",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorBlue",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 320,
+        "wires": [
+            [
+                "31916ee1.f17eaa"
+            ]
+        ]
+    },
+    {
+        "id": "1045831e.c1edd5",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1010,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "e3e57c0a.0bf8a",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorOtherOff",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 480,
+        "wires": [
+            [
+                "31916ee1.f17eaa"
+            ]
+        ]
+    },
+    {
+        "id": "60a7b381.0fff5c",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColorPurple",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 238,\n\"gg\" : 130,\n\"bb\" : 238,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760,
+        "y": 400,
+        "wires": [
+            [
+                "31916ee1.f17eaa"
+            ]
+        ]
+    },
+    {
+        "id": "27ead8b1.67cff8",
+        "type": "function",
+        "z": "a4706b2f.30b558",
+        "name": "SetColor Party!",
+        "func": "var playbulbmsg = {\"cmd\" : \"setcolor\",\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\"mode\":2,\n\"speed1\":9,\n\"speed2\":0,\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255\n}\nmsg.payload=playbulbmsg ;\nmsg.eventOrCommandType = \"setCandleMode\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760,
+        "y": 440,
+        "wires": [
+            [
+                "31916ee1.f17eaa",
+                "1045831e.c1edd5"
+            ]
+        ]
+    },
+    {
+        "id": "1ecddbf1.8395fc",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 950,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "f372dfc7.b222c8",
+        "type": "watson-conversation-v1",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "workspaceid": "f6481a40-8ea9-4de1-8acf-4b3c846bba05",
+        "multiuser": false,
+        "context": false,
+        "x": 750,
+        "y": 120,
+        "wires": [
+            [
+                "1ecddbf1.8395fc",
+                "e181fe1f.20118"
+            ]
+        ]
+    },
+    {
+        "id": "7bee2b2b.267eb4",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 650,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "e181fe1f.20118",
+        "type": "switch",
+        "z": "a4706b2f.30b558",
+        "name": "Intents",
+        "property": "payload.intents[0].intent",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "SetColor",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "whatcolors",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 110,
+        "y": 380,
+        "wires": [
+            [
+                "b6331116.19fa6",
+                "cc66370d.a35f88"
+            ],
+            [
+                "b6331116.19fa6"
+            ]
+        ]
+    },
+    {
+        "id": "cff4abfb.b71b",
+        "type": "debug",
+        "z": "a4706b2f.30b558",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 530,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f06150e9.88f7f",
+        "type": "comment",
+        "z": "a4706b2f.30b558",
+        "name": "SlackBot command",
+        "info": "Tutorial at\nhttps://medium.com/ibm-watson-developer-cloud/create-your-slack-bot-with-conversation-api-node-red-a5bf82aad24d#.2eiq7p4sd",
+        "x": 130,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "34702d46.207d12",
+        "type": "comment",
+        "z": "a4706b2f.30b558",
+        "name": "Reply to the SlackBot",
+        "info": "",
+        "x": 800,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "b6331116.19fa6",
+        "type": "change",
+        "z": "a4706b2f.30b558",
+        "name": "Watson Conversation Reply",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.output.text[0]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 560,
+        "wires": [
+            [
+                "7bee2b2b.267eb4",
+                "3afc298c.6a2fbe"
+            ]
+        ]
+    },
+    {
+        "id": "cc66370d.a35f88",
+        "type": "change",
+        "z": "a4706b2f.30b558",
+        "name": "Color Entities",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.entities[0].value",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "cff4abfb.b71b",
+                "f10bc5ef.c4d3e8"
+            ]
+        ]
+    },
+    {
+        "id": "f7412a15.d04c2",
+        "type": "change",
+        "z": "a4706b2f.30b558",
+        "name": "Pass the Slackbot input to Conversation",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.text",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 120,
+        "wires": [
+            [
+                "f372dfc7.b222c8"
+            ]
+        ]
+    }
+]

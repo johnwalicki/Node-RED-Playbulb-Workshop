@@ -1,0 +1,399 @@
+[
+    {
+        "id": "35e90a68.5b7096",
+        "type": "tab",
+        "label": "SensorTag Shake",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1ef41ff7.f28ec",
+        "type": "ibmiot in",
+        "z": "35e90a68.5b7096",
+        "authentication": "quickstart",
+        "apiKey": "",
+        "inputType": "evt",
+        "logicalInterface": "",
+        "ruleId": "",
+        "deviceId": "247189e96882",
+        "applicationId": "",
+        "deviceType": "+",
+        "eventType": "+",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "quickstart",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": true,
+        "allLogicalInterfaces": false,
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": "",
+        "qos": 0,
+        "x": 70,
+        "y": 200,
+        "wires": [
+            [
+                "a1ec4281.2bd758"
+            ]
+        ]
+    },
+    {
+        "id": "b1005c59.db0598",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 770,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "957a10b8.54a8a8",
+        "type": "function",
+        "z": "35e90a68.5b7096",
+        "name": "Shake! Flashing Red",
+        "func": "if ( flow.get(\"LastShakeEvent\") == \"flash\") {\n    return null;\n}\nflow.set(\"LastShakeEvent\",\"flash\")\n\nvar newmsg = {\"cmd\" : \"setcolor\",\n//00 7e ff 00 00 00 19 00\"\n// modes: 01 = Fade, 02 = Jump RBG (rainbow), 03 = Fade RGB (rainbow), 04 = Candle Effect\n\n\"mode\":0,\n\"speed1\":0,\n\"speed2\":0,\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0\n}\n\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.eventOrCommandType = \"setCandleMode\";\nmsg.payload=newmsg ;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "bc00cd39.73a8a8",
+                "10f60332.d4ccb5"
+            ]
+        ]
+    },
+    {
+        "id": "d3af6864.a49be",
+        "type": "function",
+        "z": "35e90a68.5b7096",
+        "name": "Calm - Green",
+        "func": "if ( flow.get(\"LastShakeEvent\") == \"calm\") {\n    return null;\n}\nflow.set(\"LastShakeEvent\",\"calm\")\n\nvar newmsg = {\"cmd\" : \"setColor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0\n}\n\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 510,
+        "y": 400,
+        "wires": [
+            [
+                "10f60332.d4ccb5"
+            ]
+        ]
+    },
+    {
+        "id": "8d4bbc40.89c8f8",
+        "type": "function",
+        "z": "35e90a68.5b7096",
+        "name": "Extract Acceleration data",
+        "func": "var accl = { acc_y : Math.abs(parseFloat(msg.payload.d.acc_y)), \n             acc_x : Math.abs(parseFloat(msg.payload.d.acc_x)), \n             acc_z : Math.abs(parseFloat(msg.payload.d.acc_z)),\n             light : Math.abs(parseFloat(msg.payload.d.light)) };\nmsg.payload = accl;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 510,
+        "y": 200,
+        "wires": [
+            [
+                "b1005c59.db0598",
+                "aa4e9447.208b5"
+            ]
+        ]
+    },
+    {
+        "id": "aa4e9447.208b5",
+        "type": "function",
+        "z": "35e90a68.5b7096",
+        "name": "Shake Threshold",
+        "func": "\nif ( msg.payload.acc_y > 3 ) {\n    return [ msg, null, null ];\n} else if ( msg.payload.acc_x > 3 ) {\n    return [ msg, null, null ];\n} else if ( msg.payload.acc_z > 3 ) {\n    return [ msg, null, null ];\n} else if ( msg.payload.light < 10 ) {\n    return [ null, null, msg ];\n}\n\nreturn [ null, msg, null ];",
+        "outputs": "3",
+        "noerr": 0,
+        "x": 230,
+        "y": 400,
+        "wires": [
+            [
+                "7800a342.50b4b4",
+                "957a10b8.54a8a8"
+            ],
+            [
+                "d3af6864.a49be",
+                "7800a342.50b4b4"
+            ],
+            [
+                "2278a5bd.3ed1a2",
+                "7800a342.50b4b4"
+            ]
+        ]
+    },
+    {
+        "id": "bc00cd39.73a8a8",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 770,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "7800a342.50b4b4",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 510,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "10f60332.d4ccb5",
+        "type": "ibmiot out",
+        "z": "35e90a68.5b7096",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 760,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b72e6e7e.69e4f8",
+        "type": "comment",
+        "z": "35e90a68.5b7096",
+        "name": "SensorTag sensor input",
+        "info": "",
+        "x": 120,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "20494a9c.b84c46",
+        "type": "comment",
+        "z": "35e90a68.5b7096",
+        "name": "Set the Playbulb color",
+        "info": "",
+        "x": 760,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a8ab1aba.870938",
+        "type": "inject",
+        "z": "35e90a68.5b7096",
+        "name": "ON",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 60,
+        "wires": [
+            [
+                "dd8a015e.5eb0d"
+            ]
+        ]
+    },
+    {
+        "id": "f7451a2b.71c2f",
+        "type": "inject",
+        "z": "35e90a68.5b7096",
+        "name": "OFF",
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 100,
+        "wires": [
+            [
+                "dd8a015e.5eb0d"
+            ]
+        ]
+    },
+    {
+        "id": "a1ec4281.2bd758",
+        "type": "switch",
+        "z": "35e90a68.5b7096",
+        "name": "Is this flow enabled?",
+        "property": "start-stop",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 260,
+        "y": 200,
+        "wires": [
+            [
+                "8d4bbc40.89c8f8",
+                "6be3d490.82c35c"
+            ]
+        ]
+    },
+    {
+        "id": "dd8a015e.5eb0d",
+        "type": "change",
+        "z": "35e90a68.5b7096",
+        "name": "Enable / Disable this flow",
+        "rules": [
+            {
+                "t": "set",
+                "p": "start-stop",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 80,
+        "wires": [
+            [
+                "489059ab.1e331"
+            ]
+        ]
+    },
+    {
+        "id": "fb0b58e3.e542d",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 770,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6be3d490.82c35c",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 470,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "2278a5bd.3ed1a2",
+        "type": "function",
+        "z": "35e90a68.5b7096",
+        "name": "Dark - Color Off",
+        "func": "if ( flow.get(\"LastShakeEvent\") == \"off\") {\n    return null;\n}\nflow.set(\"LastShakeEvent\",\"off\")\n\nvar playbulbmsg = {\"cmd\" : \"setcolor\",\n\"mode\":0,\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n}\n\n// Reset the entire msg object, originally set from the SensorTag\n//   \"iot-2/type/st-app/id/24718906aa05/evt/status/fmt/json\n//    deviceId: \"24718906aa05\"\n//    deviceType: \"st-app\"\n//    eventType: \"status\"\n//    format: \"json\"\n// to blank because we are sending a device command to the Playbulb\nmsg = {};\n\n// now set the new msg object\nmsg.payload=playbulbmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 440,
+        "wires": [
+            [
+                "10f60332.d4ccb5"
+            ]
+        ]
+    },
+    {
+        "id": "489059ab.1e331",
+        "type": "change",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "LastShakeEvent",
+                "pt": "flow",
+                "to": "start",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 80,
+        "wires": [
+            [
+                "fb0b58e3.e542d"
+            ]
+        ]
+    },
+    {
+        "id": "f9a8d6e6.268528",
+        "type": "ibmiot in",
+        "z": "35e90a68.5b7096",
+        "authentication": "boundService",
+        "apiKey": "4e748764.7482b",
+        "inputType": "evt",
+        "deviceId": "SensorTagGW",
+        "applicationId": "",
+        "deviceType": "RaspPiSensorTagGW",
+        "eventType": "+",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "registered",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": false,
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": "",
+        "qos": 0,
+        "x": 130,
+        "y": 640,
+        "wires": [
+            [
+                "f958fad5.6b4cb8"
+            ]
+        ]
+    },
+    {
+        "id": "f958fad5.6b4cb8",
+        "type": "debug",
+        "z": "35e90a68.5b7096",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 360,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "4e748764.7482b",
+        "type": "ibmiot",
+        "z": "",
+        "name": "",
+        "keepalive": "60",
+        "cleansession": true,
+        "appId": "",
+        "shared": false
+    }
+]

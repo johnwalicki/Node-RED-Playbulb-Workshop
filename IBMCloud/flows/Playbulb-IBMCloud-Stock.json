@@ -1,0 +1,377 @@
+[
+    {
+        "id": "44d63668.750ee",
+        "type": "tab",
+        "label": "IBM Stock",
+        "disabled": false
+    },
+    {
+        "id": "eb45e3c0.7cf0e",
+        "type": "inject",
+        "z": "44d63668.750ee",
+        "name": "",
+        "topic": "",
+        "payload": "IBM",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 100,
+        "wires": [
+            [
+                "9d38cece.3ae7e"
+            ]
+        ]
+    },
+    {
+        "id": "9d38cece.3ae7e",
+        "type": "http request",
+        "z": "44d63668.750ee",
+        "name": "Get Quote from IEX",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://api.iextrading.com/1.0/stock/{{payload}}/batch?types=quote",
+        "tls": "",
+        "x": 280,
+        "y": 100,
+        "wires": [
+            [
+                "9fc5533.ccfaeb"
+            ]
+        ]
+    },
+    {
+        "id": "16dab8d1.9746df",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 710,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "9fc5533.ccfaeb",
+        "type": "json",
+        "z": "44d63668.750ee",
+        "name": "",
+        "x": 510,
+        "y": 100,
+        "wires": [
+            [
+                "16dab8d1.9746df",
+                "8a5c190a.babea8",
+                "464b797e.6e8918",
+                "c9882e5b.8da9e"
+            ]
+        ]
+    },
+    {
+        "id": "8a5c190a.babea8",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.quote.changePercent",
+        "x": 780,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "c9882e5b.8da9e",
+        "type": "switch",
+        "z": "44d63668.750ee",
+        "name": "",
+        "property": "payload.quote.changePercent",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "lt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 240,
+        "wires": [
+            [
+                "1b5f6380.b36da5"
+            ],
+            [
+                "b97aa358.a87c8"
+            ]
+        ]
+    },
+    {
+        "id": "8fadc1da.be5f48",
+        "type": "ibmiot out",
+        "z": "44d63668.750ee",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 740,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b97aa358.a87c8",
+        "type": "function",
+        "z": "44d63668.750ee",
+        "name": "Stock DOWN - SetColorRed",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 260,
+        "wires": [
+            [
+                "8fadc1da.be5f48"
+            ]
+        ]
+    },
+    {
+        "id": "1b5f6380.b36da5",
+        "type": "function",
+        "z": "44d63668.750ee",
+        "name": "Stock UP - SetColorGreen",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 220,
+        "wires": [
+            [
+                "8fadc1da.be5f48"
+            ]
+        ]
+    },
+    {
+        "id": "464b797e.6e8918",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.quote.latestPrice",
+        "x": 770,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "23c8a801.4eeec",
+        "type": "inject",
+        "z": "44d63668.750ee",
+        "name": "",
+        "topic": "",
+        "payload": "IBM",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 440,
+        "wires": [
+            [
+                "44b04817.372d48"
+            ]
+        ]
+    },
+    {
+        "id": "fb4e7f20.455698",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 710,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "4d44a4fd.ac5ce4",
+        "type": "function",
+        "z": "44d63668.750ee",
+        "name": "get change",
+        "func": "msg.payload = parseFloat(msg.payload.changePercent) * 100.0, 2;\nmsg.topic = \"StockIndicator\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 480,
+        "wires": [
+            [
+                "721fadc8.7012bc",
+                "a54486a9.70343"
+            ]
+        ]
+    },
+    {
+        "id": "721fadc8.7012bc",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 710,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "a54486a9.70343",
+        "type": "switch",
+        "z": "44d63668.750ee",
+        "name": "Determine range: -1 < 0 > 1",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "-1",
+                "vt": "str"
+            },
+            {
+                "t": "gt",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 740,
+        "y": 540,
+        "wires": [
+            [
+                "8fccb4f.e0ddac8"
+            ],
+            [
+                "ffbd8cef.ad8268"
+            ],
+            [
+                "501035aa.bd9e74"
+            ]
+        ]
+    },
+    {
+        "id": "8fccb4f.e0ddac8",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "Bad",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "payload",
+        "x": 950,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "ffbd8cef.ad8268",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "Good",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 950,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "501035aa.bd9e74",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "Neutral",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 960,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "44b04817.372d48",
+        "type": "http request",
+        "z": "44d63668.750ee",
+        "name": "Get Stock Quote",
+        "method": "GET",
+        "ret": "obj",
+        "url": "https://api.iextrading.com/1.0/stock/ibm/quote",
+        "tls": "",
+        "x": 270,
+        "y": 440,
+        "wires": [
+            [
+                "31d5eeb1.a03e2a",
+                "4d44a4fd.ac5ce4",
+                "a9051624.02742"
+            ]
+        ]
+    },
+    {
+        "id": "31d5eeb1.a03e2a",
+        "type": "debug",
+        "z": "44d63668.750ee",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 470,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a9051624.02742",
+        "type": "change",
+        "z": "44d63668.750ee",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.latestPrice",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 440,
+        "wires": [
+            [
+                "fb4e7f20.455698"
+            ]
+        ]
+    }
+]

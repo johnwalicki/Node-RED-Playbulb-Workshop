@@ -1,0 +1,142 @@
+[
+    {
+        "id": "8c64d72.810be28",
+        "type": "tab",
+        "label": "Remote Camera Control",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "135f9d91.4a0532",
+        "type": "wiotp in",
+        "z": "8c64d72.810be28",
+        "authType": "d",
+        "deviceKey": "889e51dc.550b78",
+        "deviceType": "",
+        "deviceId": "",
+        "command": "takePic",
+        "commandType": "g",
+        "qos": 0,
+        "name": "",
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "d384b6a3.d10fa8",
+                "f612e7ff.9c7a7"
+            ]
+        ]
+    },
+    {
+        "id": "d384b6a3.d10fa8",
+        "type": "debug",
+        "z": "8c64d72.810be28",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 290,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f612e7ff.9c7a7",
+        "type": "camerapi-takephoto",
+        "z": "8c64d72.810be28",
+        "filemode": "0",
+        "filename": "",
+        "filedefpath": "1",
+        "filepath": "",
+        "fileformat": "jpeg",
+        "resolution": "1",
+        "rotation": "180",
+        "fliph": "0",
+        "flipv": "0",
+        "brightness": "50",
+        "contrast": "0",
+        "sharpness": "0",
+        "imageeffect": "none",
+        "name": "",
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "b6bb6c46.441278",
+                "a2462a82.c64f2"
+            ]
+        ]
+    },
+    {
+        "id": "b6bb6c46.441278",
+        "type": "debug",
+        "z": "8c64d72.810be28",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 590,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "175e720c.85cf46",
+        "type": "inject",
+        "z": "8c64d72.810be28",
+        "name": "Test",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "f612e7ff.9c7a7"
+            ]
+        ]
+    },
+    {
+        "id": "a2462a82.c64f2",
+        "type": "wiotp out",
+        "z": "8c64d72.810be28",
+        "authType": "d",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "889e51dc.550b78",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "picData",
+        "format": "data",
+        "qos": "",
+        "name": "",
+        "x": 580,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "cda58150.7e477",
+        "type": "comment",
+        "z": "8c64d72.810be28",
+        "name": "Remote Camera Control from Bluemix",
+        "info": "",
+        "x": 190,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "889e51dc.550b78",
+        "type": "wiotp-credentials",
+        "z": "",
+        "name": "",
+        "org": "5yrusp",
+        "serverName": "",
+        "devType": "raspi",
+        "devId": "PiController",
+        "keepalive": "60",
+        "cleansession": true,
+        "tls": "",
+        "usetls": false
+    }
+]

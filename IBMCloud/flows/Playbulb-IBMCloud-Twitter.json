@@ -1,0 +1,565 @@
+[
+    {
+        "id": "2c55af09.7578b8",
+        "type": "tab",
+        "label": "Twitter Mood",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "efaa275.3a1f758",
+        "type": "twitter in",
+        "z": "2c55af09.7578b8",
+        "twitter": "",
+        "tags": "",
+        "user": "false",
+        "name": "Mood of my Twitter Feed",
+        "inputs": 1,
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "2d99e091.190568"
+            ]
+        ]
+    },
+    {
+        "id": "af672116.81dd98",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "Tone categories",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 800,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "c84bf5cf.5b2bf8",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "HighScore",
+        "func": "var response = msg.response;\n\n// var emotions = [];\n//emotions = msg.response.document_tone.tone_categories\n//                .filter(function(c){\n//                    if (c.category_id == \"emotion_tone\")\n//                    {return c; }\n//                   })[0].tones;\n\nvar myscore =  0;     \nvar mynewmsg ={};\nfor (var i=0; i<response.document_tone.tones.length; i++) {\n    if(response.document_tone.tones[i].score > myscore)\n    {\n        msg.payload = response.document_tone.tones[i].score;\n        msg.topic = response.document_tone.tones[i].tone_name;\n        myscore = response.document_tone.tones[i].score;\n    }\n}\n\n// for (var i=0; i<emotions.length; i++) {\n//     if(emotions[i].score > myscore)\n//    {\n//        msg.payload = emotions[i].score;\n//        msg.topic = emotions[i].tone_name;\n//        myscore = emotions[i].score;\n//    }\n// }\nmynewmsg = msg;\nreturn mynewmsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "416b32f6.7b9364",
+                "771445f.e5ff53c"
+            ]
+        ]
+    },
+    {
+        "id": "416b32f6.7b9364",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "Score",
+        "active": true,
+        "console": "false",
+        "complete": "topic",
+        "x": 770,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "96b740ba.c0e2c8",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "Test",
+        "topic": "",
+        "payload": "I hate boring demos",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "386c85d7.930daa"
+            ]
+        ]
+    },
+    {
+        "id": "cc1998f6.a22f78",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "Print msg.response",
+        "active": true,
+        "console": "false",
+        "complete": "response",
+        "x": 570,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "2c97885.49d6178",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorYellow-Joy",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "4aa054df.9becd4",
+                "f73043.099657c"
+            ]
+        ]
+    },
+    {
+        "id": "4aa054df.9becd4",
+        "type": "ibmiot out",
+        "z": "2c55af09.7578b8",
+        "authentication": "boundService",
+        "apiKey": "",
+        "outputType": "cmd",
+        "deviceId": "playbulb",
+        "deviceType": "raspi",
+        "eventCommandType": "setColor",
+        "format": "json",
+        "data": "msg.payload",
+        "qos": 0,
+        "name": "IBM IoT",
+        "service": "registered",
+        "x": 860,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "771445f.e5ff53c",
+        "type": "switch",
+        "z": "2c55af09.7578b8",
+        "name": "SelectColor",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Confident",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Joy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Fear",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Sadness",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Anger",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Disgust",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 7,
+        "x": 350,
+        "y": 480,
+        "wires": [
+            [
+                "2c97885.49d6178"
+            ],
+            [
+                "2c97885.49d6178"
+            ],
+            [
+                "4d8aedad.ef464c"
+            ],
+            [
+                "9ef867fd.887c78"
+            ],
+            [
+                "176fb732.d325c1"
+            ],
+            [
+                "e36f4861.01a1b"
+            ],
+            [
+                "647209f3.79c02"
+            ]
+        ]
+    },
+    {
+        "id": "4d8aedad.ef464c",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorRed-Fear",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 255,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 420,
+        "wires": [
+            [
+                "4aa054df.9becd4"
+            ]
+        ]
+    },
+    {
+        "id": "176fb732.d325c1",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorGreen-Anger",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 255,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "4aa054df.9becd4"
+            ]
+        ]
+    },
+    {
+        "id": "9ef867fd.887c78",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorBlue-Sadness",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 255,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 460,
+        "wires": [
+            [
+                "4aa054df.9becd4"
+            ]
+        ]
+    },
+    {
+        "id": "f73043.099657c",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 870,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "647209f3.79c02",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorOtherOff",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 0,\n\"gg\" : 0,\n\"bb\" : 0,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590,
+        "y": 580,
+        "wires": [
+            [
+                "4aa054df.9becd4"
+            ]
+        ]
+    },
+    {
+        "id": "e36f4861.01a1b",
+        "type": "function",
+        "z": "2c55af09.7578b8",
+        "name": "SetColorPurple-Disgust",
+        "func": "var newmsg = {\"cmd\" : \"setcolor\",\n\"mode\":\"\",\n\"speed\":\"\",\n\"rr\" : 238,\n\"gg\" : 130,\n\"bb\" : 238,\n\"tone\" : msg.topic,   \n\"score\" : msg.payload\n}\nmsg.payload=newmsg ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 610,
+        "y": 540,
+        "wires": [
+            [
+                "4aa054df.9becd4"
+            ]
+        ]
+    },
+    {
+        "id": "386c85d7.930daa",
+        "type": "watson-tone-analyzer-v3",
+        "z": "2c55af09.7578b8",
+        "name": "Analyze Tone",
+        "tones": "emotion",
+        "sentences": "true",
+        "contentType": "false",
+        "x": 360,
+        "y": 240,
+        "wires": [
+            [
+                "c84bf5cf.5b2bf8",
+                "cc1998f6.a22f78",
+                "52c47744.8165d"
+            ]
+        ]
+    },
+    {
+        "id": "32919be.06e15e4",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "ON",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 40,
+        "wires": [
+            [
+                "2365aae1.f8ab06"
+            ]
+        ]
+    },
+    {
+        "id": "54bf0663.b6a1f",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "OFF",
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 90,
+        "y": 80,
+        "wires": [
+            [
+                "2365aae1.f8ab06"
+            ]
+        ]
+    },
+    {
+        "id": "2d99e091.190568",
+        "type": "switch",
+        "z": "2c55af09.7578b8",
+        "name": "Is this flow enabled?",
+        "property": "start-stop",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 380,
+        "y": 140,
+        "wires": [
+            [
+                "386c85d7.930daa",
+                "6638563.8076028",
+                "ee9e94ee.9c4bc8"
+            ]
+        ]
+    },
+    {
+        "id": "2365aae1.f8ab06",
+        "type": "change",
+        "z": "2c55af09.7578b8",
+        "name": "Enable / Disable this flow",
+        "rules": [
+            {
+                "t": "set",
+                "p": "start-stop",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 60,
+        "wires": [
+            [
+                "7670f152.100df8"
+            ]
+        ]
+    },
+    {
+        "id": "7670f152.100df8",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 510,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ee9e94ee.9c4bc8",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "tweet.text",
+        "x": 620,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6e6eceac.1ef838",
+        "type": "sentiment",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "x": 820,
+        "y": 140,
+        "wires": [
+            [
+                "ff00ca51.8ab758"
+            ]
+        ]
+    },
+    {
+        "id": "ff00ca51.8ab758",
+        "type": "debug",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "sentiment.score",
+        "x": 1020,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "6638563.8076028",
+        "type": "change",
+        "z": "2c55af09.7578b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tweet.text",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 140,
+        "wires": [
+            [
+                "6e6eceac.1ef838"
+            ]
+        ]
+    },
+    {
+        "id": "52c47744.8165d",
+        "type": "change",
+        "z": "2c55af09.7578b8",
+        "name": "tone_categories",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "response.document_tone.tone_categories",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "af672116.81dd98"
+            ]
+        ]
+    },
+    {
+        "id": "a2931945.2b6188",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "Happy test",
+        "topic": "",
+        "payload": "every one is awesome",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "386c85d7.930daa"
+            ]
+        ]
+    },
+    {
+        "id": "b0eadec1.d8546",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "Angry test",
+        "topic": "",
+        "payload": "This demo is terrible and should be burned immediately",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "386c85d7.930daa"
+            ]
+        ]
+    },
+    {
+        "id": "394f7cac.d3b514",
+        "type": "inject",
+        "z": "2c55af09.7578b8",
+        "name": "Unhappy test",
+        "topic": "",
+        "payload": "This is miserable and sad",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 130,
+        "y": 360,
+        "wires": [
+            [
+                "386c85d7.930daa"
+            ]
+        ]
+    }
+]

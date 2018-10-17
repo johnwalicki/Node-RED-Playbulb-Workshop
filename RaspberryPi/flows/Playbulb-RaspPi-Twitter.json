@@ -1,0 +1,616 @@
+[
+    {
+        "id": "97f26c23.63a358",
+        "type": "tab",
+        "label": "Playbulb Tweet Tone Analyzer",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "5c04c962.8c67f",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "Tone categories",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "payload",
+        "x": 980,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "593fba12.03b8c4",
+        "type": "function",
+        "z": "97f26c23.63a358",
+        "name": "HighScore",
+        "func": "var response = msg.response;\n\n// var emotions = [];\n//emotions = msg.response.document_tone.tone_categories\n//                .filter(function(c){\n//                    if (c.category_id == \"emotion_tone\")\n//                    {return c; }\n//                   })[0].tones;\n\nvar myscore =  0;     \nvar mynewmsg ={};\nfor (var i=0; i<response.document_tone.tones.length; i++) {\n    if(response.document_tone.tones[i].score > myscore)\n    {\n        msg.payload = response.document_tone.tones[i].score;\n        msg.topic = response.document_tone.tones[i].tone_name;\n        myscore = response.document_tone.tones[i].score;\n    }\n}\n\n// for (var i=0; i<emotions.length; i++) {\n//     if(emotions[i].score > myscore)\n//    {\n//        msg.payload = emotions[i].score;\n//        msg.topic = emotions[i].tone_name;\n//        myscore = emotions[i].score;\n//    }\n// }\nmynewmsg = msg;\nreturn mynewmsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [
+                "a279675.ba50298",
+                "482bdd8d.2d6d5c"
+            ]
+        ]
+    },
+    {
+        "id": "a279675.ba50298",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "Score",
+        "active": true,
+        "console": "false",
+        "complete": "topic",
+        "x": 950,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "bbc293b6.68cd1",
+        "type": "inject",
+        "z": "97f26c23.63a358",
+        "name": "Test",
+        "topic": "",
+        "payload": "I hate boring demos",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "1d1d66f.9f49f99"
+            ]
+        ]
+    },
+    {
+        "id": "e9b96083.1910f8",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "Print msg.response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "complete": "response",
+        "x": 770,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "1d1d66f.9f49f99",
+        "type": "watson-tone-analyzer-v3",
+        "z": "97f26c23.63a358",
+        "name": "Analyze Tone",
+        "tones": "emotion",
+        "sentences": "true",
+        "contentType": "false",
+        "tone-method": "generalTone",
+        "default-endpoint": true,
+        "service-endpoint": "",
+        "x": 560,
+        "y": 380,
+        "wires": [
+            [
+                "593fba12.03b8c4",
+                "e9b96083.1910f8"
+            ]
+        ]
+    },
+    {
+        "id": "de2dd7ae.5934d",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "tone_categories",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "response.document_tone.tone_categories",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 380,
+        "wires": [
+            [
+                "5c04c962.8c67f"
+            ]
+        ]
+    },
+    {
+        "id": "a421308b.2cbe1",
+        "type": "twitter in",
+        "z": "97f26c23.63a358",
+        "twitter": "",
+        "tags": "",
+        "user": "false",
+        "name": "",
+        "topic": "tweets",
+        "inputs": 1,
+        "x": 90,
+        "y": 80,
+        "wires": [
+            [
+                "ace0afcc.123b3",
+                "4b6a1652.ba0a3",
+                "3d863e70.bb2b9a"
+            ]
+        ]
+    },
+    {
+        "id": "ace0afcc.123b3",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "tweet.text",
+        "x": 340,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "50bc5699.06cbf",
+        "type": "inject",
+        "z": "97f26c23.63a358",
+        "name": "Happy test",
+        "topic": "",
+        "payload": "every one is awesome",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 100,
+        "y": 200,
+        "wires": [
+            [
+                "3d863e70.bb2b9a"
+            ]
+        ]
+    },
+    {
+        "id": "3d863e70.bb2b9a",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "tweet.text",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 200,
+        "wires": [
+            [
+                "1d1d66f.9f49f99",
+                "6a6c67ee.cd9b6",
+                "7768e2ac.ff37b4"
+            ]
+        ]
+    },
+    {
+        "id": "29af665f.68aa32",
+        "type": "inject",
+        "z": "97f26c23.63a358",
+        "name": "Neutral test",
+        "topic": "",
+        "payload": "It is what it is",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "3d863e70.bb2b9a"
+            ]
+        ]
+    },
+    {
+        "id": "63c66307.7127d4",
+        "type": "inject",
+        "z": "97f26c23.63a358",
+        "name": "Unhappy test",
+        "topic": "",
+        "payload": "This is miserable and sad",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "3d863e70.bb2b9a"
+            ]
+        ]
+    },
+    {
+        "id": "4b6a1652.ba0a3",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 330,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6a6c67ee.cd9b6",
+        "type": "debug",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 550,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "482bdd8d.2d6d5c",
+        "type": "switch",
+        "z": "97f26c23.63a358",
+        "name": "SelectColor",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Confident",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Joy",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Fear",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Sadness",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Anger",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Disgust",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 7,
+        "x": 550,
+        "y": 680,
+        "wires": [
+            [
+                "ffc7b79c.c7bfc8"
+            ],
+            [
+                "ffc7b79c.c7bfc8"
+            ],
+            [
+                "f5e5a3e9.9e40d8"
+            ],
+            [
+                "2940fcdc.eea5a4"
+            ],
+            [
+                "ea1c31da.1d3668"
+            ],
+            [
+                "683e6a53.b92894"
+            ],
+            [
+                "c71e9186.b78a08"
+            ]
+        ]
+    },
+    {
+        "id": "7768e2ac.ff37b4",
+        "type": "watson-text-to-speech",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "lang": "en-US",
+        "langhidden": "en-US",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "",
+        "voice": "en-US_MichaelVoice",
+        "voicehidden": "en-US_MichaelVoice",
+        "format": "audio/wav",
+        "password": "5824BY7NvNkT",
+        "payload-response": true,
+        "default-endpoint": true,
+        "service-endpoint": "",
+        "x": 560,
+        "y": 200,
+        "wires": [
+            [
+                "79e7d512.0dda6c",
+                "1f5913a5.1c9c3c"
+            ]
+        ]
+    },
+    {
+        "id": "79e7d512.0dda6c",
+        "type": "play audio",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "voice": "",
+        "x": 870,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "bef9e729.b851c",
+        "type": "comment",
+        "z": "97f26c23.63a358",
+        "name": "Paste API keys for Text to Speech and Tone Analyzer",
+        "info": "",
+        "x": 680,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ca1a738b.20f5d8",
+        "type": "comment",
+        "z": "97f26c23.63a358",
+        "name": "Pick a #hashtag to follow",
+        "info": "",
+        "x": 150,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "a10a6858.72de78",
+        "type": "comment",
+        "z": "97f26c23.63a358",
+        "name": "Set Playbulb Candle LED color",
+        "info": "",
+        "x": 850,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "92f4e99d.827d7",
+        "type": "comment",
+        "z": "97f26c23.63a358",
+        "name": "Extract highest emotion",
+        "info": "",
+        "x": 660,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a521e8ce.f9c22",
+        "type": "comment",
+        "z": "97f26c23.63a358",
+        "name": "Set Playbuld Candle LED based on Twitter sentiment",
+        "info": "",
+        "x": 540,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "f5e5a3e9.9e40d8",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Red Color - Fear",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "red",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 620,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "ea1c31da.1d3668",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Green Color - Anger",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "green",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 700,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "2940fcdc.eea5a4",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Blue Color - Sadness",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "blue",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 660,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "ffc7b79c.c7bfc8",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Yellow Color - Joy",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "yellow",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 580,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "683e6a53.b92894",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Purple Color - Disgust",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "purple",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 740,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "c71e9186.b78a08",
+        "type": "change",
+        "z": "97f26c23.63a358",
+        "name": "Off - Other",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0,0,0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 780,
+        "wires": [
+            [
+                "c4cf5c52.9548"
+            ]
+        ]
+    },
+    {
+        "id": "c4cf5c52.9548",
+        "type": "link out",
+        "z": "97f26c23.63a358",
+        "name": "",
+        "links": [
+            "cb0d9ce4.bce98"
+        ],
+        "x": 1035,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "1f5913a5.1c9c3c",
+        "type": "speakerpi-output",
+        "z": "97f26c23.63a358",
+        "choose": "filebased",
+        "filename": "",
+        "channels": "1",
+        "bitdepth": "8",
+        "samplerate": "11025",
+        "name": "",
+        "x": 900,
+        "y": 180,
+        "wires": []
+    }
+]
