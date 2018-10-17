@@ -1,7 +1,8 @@
 ## IBM Cloud Setup Instructions
 
-- Visit the [IBM Cloud](https://console.bluemix.net/dashboard/apps/)
-- Launch the Watson IoT Platform instance
+- Visit the [IBM Cloud](https://console.bluemix.net/dashboard/apps/) Dashboard
+- Launch the Watson IoT Platform instance created for the Playbulb
+- Select **Devices** from the left navigation menu
 - Create a **raspi** DeviceType
 - Create a **PiController** device
   - Note the auth token
@@ -13,12 +14,12 @@
 ## Raspberry Pi Setup instructions
 
 - Use SSH or PuTTY from your laptop and connect to the RaspberryPi
-- The Playbulb bluetooth controller is in the **/home/pi/playbulb** directory.
+- The Playbulb bluetooth controller programs are installed in the **/home/pi/playbulb** directory. The **device.json** file contains the MQTT connection information. 
 ```
 cd /home/pi/playbulb
 vi device.json
 ```
-Enter the OrgID, Device Type, Device ID, Auth Token information  :
+Enter the OrgID, Device Type, Device ID, Auth Token information created in the Watson IoT Platform :
 ```
 {
   "org": "<your org ID here>",
