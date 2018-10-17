@@ -31,14 +31,20 @@ This tutorial can be completed using an IBM Cloud Lite account.
 - Connect your laptop to Workshop WiFi SSID
 - Use an ssh client to log into your Raspberry Pi
 
-# Set Up the Playbulb Controller on Raspberry Pi
+## Set Up the Playbulb Controller on Raspberry Pi
 - Follow these [Playbulb Controller enablement instructions](RaspberryPi/PLAYBULB.md)
 - Using a Browser on your laptop, connect to Node-RED on your Raspberry Pi at [http://192.168.2.x:1880](http://192.168.2.50:1880)
   - *Note: Replace the x with the IP Address of your Raspberry Pi*
-- Import the Playbulb Raspberry Pi flows into Node-RED
-  -
+- Set Up the Playbulb Device Controller - [Instructions](RaspberryPi/SETUP.md)
+- Import the following Playbulb Raspberry Pi flows into Node-RED on the RaspberryPi.
+  - [Control the Playbulb over Bluetooth]()
+  - [Remotely Take a Picture]()
+  - [Send SenseHat Joystick commands]()
+  - [Twitter mood]() – Local alert the Playbulb
 
-# Set Up Node-RED Platform Flows on the IBM Cloud Internet of Things platform
+## Set Up Node-RED Platform Flows on the IBM Cloud Internet of Things platform
+
+Follow the instructions in each of these readme files :
 - [Control the Playbulb](IBMCloud/PB-CTRL.md) from Watson IoT Platform
 - [Voice ChatBot](IBMCloud/PB-VOICECHAT.md) – Change the Playbulb color
 - [Weather Report](IBMCloud/PB-WEATHER.md) – Alert the Playbulb
