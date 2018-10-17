@@ -8,7 +8,7 @@ This workshop will extend the **Playbulb Candle & Watson IoT Platform using Wats
 In this workshop, you will learn how to leverage the Watson Cognitive APIs and Services to control the Playbulb in interesting ways.
 - Speech to Text
 - Text to Speech
-- Language Translation
+- Language Translationko
 - Tone Analysis
 - Weather Company APIs
 - Visual Recognition
@@ -32,10 +32,9 @@ This tutorial can be completed using an IBM Cloud Lite account.
 - Use an ssh client to log into your Raspberry Pi
 
 ## Set Up the Playbulb Controller on Raspberry Pi
-- Follow these [Playbulb Controller enablement instructions](RaspberryPi/PLAYBULB.md)
+- Follow these [Playbulb Controller enablement instructions](RaspberryPi/SETUP.md)
 - Using a Browser on your laptop, connect to Node-RED on your Raspberry Pi at [http://192.168.2.x:1880](http://192.168.2.50:1880)
   - *Note: Replace the x with the IP Address of your Raspberry Pi*
-- Set Up the Playbulb Device Controller - [Instructions](RaspberryPi/SETUP.md)
 - Import the following Playbulb Raspberry Pi flows into Node-RED on the RaspberryPi.
   - [Control the Playbulb over Bluetooth]()
   - [Remotely Take a Picture]()
